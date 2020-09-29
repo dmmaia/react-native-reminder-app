@@ -9,40 +9,42 @@ import {
 
 import DatePicker from 'react-native-date-picker';
 
+import {notificationManager} from './NotificationManager';
+
 const NewReminderForm = () => {
   const [date, setDate] = useState(new Date());
   const [hour, setHour] = useState(new Date());
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const [timePickerDisplay, setTimePickerDisplay] = useState(false);
-  const [datePickerDisplay, setDatePickerDisplay] = useState(false);
+  function onPressNotification(notifiTitle, notifiMessage) {
+    notificationManager.showNotification(1, notifiTitle, notifiMessage, {}, {});
+  }
 
   return (
     <View style={styles.boxNewReminder}>
       <Text style={styles.labelFieldTitle}>Title:</Text>
       <TextInput
         value={title}
-        onChange={(event) => {
-          setTitle(event);
-        }}
+        onChangeText={(text) => setTitle(text)}
         style={styles.boxFieldTitle}
       />
 
       <Text style={styles.labelForm}>Description:</Text>
       <TextInput
         value={description}
-        onChange={(event) => {
-          setDescription(event);
-        }}
+        onChangeText={(text) => setDescription(text)}
         style={styles.boxField}
+        multiline={true}
       />
 
       <Text style={styles.labelForm}>Date: </Text>
 
       <Text style={styles.labelForm}>Hour: </Text>
 
-      <TouchableOpacity style={styles.buttonStyle}>
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        onPress={() => onPressNotification(title, description)}>
         <Text style={styles.buttonStyleText}>+Add Reminder</Text>
       </TouchableOpacity>
     </View>
@@ -58,14 +60,18 @@ const styles = StyleSheet.create({
   },
   boxFieldTitle: {
     borderColor: '#909090',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     fontSize: 23,
     marginBottom: 40,
   },
   boxField: {
     borderColor: '#909090',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     fontSize: 20,
+    borderTopWidth: 0.3,
+    textAlignVertical: 'top',
+    overflow: 'scroll',
+    height: 150,
   },
   labelFieldTitle: {
     fontSize: 26,
